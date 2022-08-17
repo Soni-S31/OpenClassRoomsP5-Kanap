@@ -16,15 +16,15 @@ fetch(requestURLProduct)
     .catch(function (error) {
         alert('Erreur : ' + error); // Une erreur est survenue
     });
-    */
+*/
 
-//Appel de l'ID dans l'URL
+//...............................Appel de l'ID dans l'URL.....................
 let str = window.location.href;
 let url = new URL(str);
 let idUrl = url.searchParams.get('id');
 console.log(idUrl);
 
-//Appel API avec l'ID
+//.............................Appel API avec l'ID............................
 const requestURLProduct = 'http://localhost:3000/api/products/' + idUrl;
 fetch(requestURLProduct)
     .then(function (response) {
@@ -41,7 +41,7 @@ fetch(requestURLProduct)
         alert('Erreur : ' + error); // Une erreur est survenue
     });
 
-//Affichage de l'article page produit
+//................................Affichage de l'article page produit..........
 function showArticle(product) {
     document.title = product.name;
     let itemImg = document.querySelector('.item__img');
@@ -65,14 +65,52 @@ function showArticle(product) {
     contentItem.textContent = product.description;
 
     //Insertion choix couleur
-    let colorsChoice = product.colors;
+    let colors = product.colors;
     let colorsItem = document.querySelector('#colors');
 
-    for (let i = 0; i < colorsChoice.length; i++) {
-        let color = colorsChoice[i];
+    for (let i = 0; i < colors.length; i++) {
+        let color = colors[i];
         let optionColors = document.createElement('option');
         optionColors.setAttribute('value', product.colors);
         optionColors.textContent = color;
         colorsItem.appendChild(optionColors);
+    }
+}
+
+//...................création du panier
+class Basket {
+    constructor() {
+        let basket = localStorage.getItem('basket');
+        if (basket == null) {
+            this.basket = [];
+        } else {
+            this.basket = JSON.parse(basket);
+        }
+    }
+    //sauvegarder le panier
+    saveBasket() {
+        localStorage.setItem('basket', JSON.stringify(this.basket));
+    }
+    //ajouter un article
+    addBasket(product) {
+        let foundProduct = this.basket.find((p) => p.id == product.id); //recherche si le produit et present dans le panier
+        if (foundProduct != undefined) {
+            foundProduct.quantity++;
+        } else {
+            product.quantity = 1; //definition de quantité a 1 par défaut
+            this.basket.push(product);
+        }
+        this.saveBasket();
+    }
+
+    //modfier la quantité
+    changeQuantity(product, quantity) {
+        let foundProduct = this.basket.find((p) => p.id == product.id); //recherche si le produit et present dans le panier
+        if (foundProduct != undefined) {
+            foundProduct.quantity += quantity;
+            if (foundProduct.quantity <= 0) {
+                removeFromBasket(foundProduct);
+            } else this.saveBasket();
+        }
     }
 }
