@@ -113,4 +113,29 @@ class Basket {
             } else this.saveBasket();
         }
     }
+    //supprimer un article
+    removeFromBasket(product) {
+        let basket = getBasket();
+        basket = basket.filter((p) => p.id != product.id);
+        saveBasket();
+    }
 }
+
+//........création variables pour le localstorage
+let choiceColor = document.querySelector('#colors');
+let choiceQuantity = document.querySelector('#quantity');
+let btnAddProduct = document.querySelector('#addToCart');
+const productName = document.querySelector('#title');
+
+//............Ecoute du click pour l'ajout au panier
+btnAddProduct.addEventListener('click', function (event) {
+    let valueColor = choiceColor.value; // récupération couleur choisie
+    let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
+    if (valueColor == '') {
+        alert('Veuiller choisir une couleur'); // si couleur non selectionnée
+    } else if (valueQuantity == 0) {
+        alert('Veuillez choisir une quantité'); // si quantité non selectionnée
+    }
+    // récupération du panier
+    else Basket;
+});
