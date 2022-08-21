@@ -78,23 +78,25 @@ function showArticle(product) {
 }
 
 //...................local storage..................
-/////////////////////////////////////////////////////
 
-//........variables pour le localstorage
+//........variables pour le localstorage et function
 let choiceColor = document.querySelector('#colors');
 let choiceQuantity = document.querySelector('#quantity');
 let btnAddProduct = document.querySelector('#addToCart');
-let choiceName = document.querySelector('#title');
-Boolean = false;
+let basket = {
+    quantityTotal: 0,
+    totalProducts: [],
+};
+
+function saveBasket(basket) {
+    localStorage.setItem('basket', JSON.stringify(basket));
+}
 
 //............Ecoute du click pour l'ajout au panier
 btnAddProduct.addEventListener('click', function (event) {
     let valueColor = choiceColor.value; // récupération couleur choisie
     let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
-    let basket = {
-        quantityTotal: 0,
-        totalProducts: [],
-    };
+
     if (valueColor == '') {
         alert('Veuiller choisir une couleur'); // si couleur non selectionnée
     } else if (valueQuantity == 0) {
@@ -104,7 +106,7 @@ btnAddProduct.addEventListener('click', function (event) {
 
         let storageBasket = localStorage.getItem('basket');
         if (storageBasket == null) {
-            return basket;
+            basket;
         } else {
             let basket = JSON.parse(storageBasket);
         }
@@ -119,35 +121,32 @@ btnAddProduct.addEventListener('click', function (event) {
         };
 
         //controle si article dans le panier
-
         for (var i = 0; i < basket.totalProducts.length; i++) {
             basketProduct = basket.totalProducts[i];
 
-            //ajouter un article si pas présent dans le panier
+            //ajouter un article deja présent dans le panier
+
             if (
-                basketProduct.id !== product.id &&
-                basketProduct.color !== product.color
+                basketProduct.id == product.id &&
+                basketProduct.color == product.color
             ) {
-                basket.totalProducts.push(product);
-                newQuantity = basket.totalQuantity + product.quantity;
-                basket.quantityTotal = newQuantity;
-                break;
+                newQuantity = basketProduct.quantity + product.quantity;
+                basketProduct.quantity = newQuantity;
+                basket.quantityTotal = product.quantity + basket.quantityTotal;
             }
         }
 
-        // modification quantité si déja dans le panier
         if (
-            basketProduct.id == product.id &&
-            basketProduct.color == product.color
+            basketProduct.id !== product.id &&
+            basketProduct.color !== product.color
         ) {
-            newQuantity = basketProduct.quantity + product.quantity;
-            basketProduct.quantity = newQuantity;
-            basket.quantityTotal = product.quantity + basket.quantityTotal;
+            basket.totalProducts.push(product);
+            newQuantity = basket.quantityTotal + product.quantity;
+            basket.quantityTotal = newQuantity;
         }
 
-        alert('Panier mis à jour');
-        let lineBasket = JSON.stringify(basket);
-        localStorage.setItem('basket', lineBasket);
+        alert('Votre panier est à jour');
+        saveBasket;
         window.location.reload();
     }
 });
