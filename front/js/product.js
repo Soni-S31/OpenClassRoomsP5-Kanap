@@ -25,7 +25,8 @@ let idUrl = url.searchParams.get('id');
 console.log(idUrl);
 
 //.............................Appel API avec l'ID............................
-const requestURLProduct = 'http://localhost:3000/api/products/' + idUrl;
+let unitArticle = '';
+let requestURLProduct = 'http://localhost:3000/api/products/' + idUrl;
 fetch(requestURLProduct)
     .then(function (response) {
         if (response.ok) {
@@ -33,7 +34,6 @@ fetch(requestURLProduct)
         }
     })
     .then(function (resultatProduct) {
-        let unitArticle = '';
         unitArticle = resultatProduct;
         showArticle(unitArticle);
     })
@@ -77,65 +77,77 @@ function showArticle(product) {
     }
 }
 
-//...................création du panier
-class Basket {
-    constructor() {
-        let basket = localStorage.getItem('basket');
-        if (basket == null) {
-            this.basket = [];
-        } else {
-            this.basket = JSON.parse(basket);
-        }
-    }
-    //sauvegarder le panier
-    saveBasket() {
-        localStorage.setItem('basket', JSON.stringify(this.basket));
-    }
-    //ajouter un article
-    addBasket(product) {
-        let foundProduct = this.basket.find((p) => p.id == product.id); //recherche si le produit et present dans le panier
-        if (foundProduct != undefined) {
-            foundProduct.quantity++;
-        } else {
-            product.quantity = 1; //definition de quantité a 1 par défaut
-            this.basket.push(product);
-        }
-        this.saveBasket();
-    }
+//...................local storage..................
+/////////////////////////////////////////////////////
 
-    //modfier la quantité
-    changeQuantity(product, quantity) {
-        let foundProduct = this.basket.find((p) => p.id == product.id); //recherche si le produit et present dans le panier
-        if (foundProduct != undefined) {
-            foundProduct.quantity += quantity;
-            if (foundProduct.quantity <= 0) {
-                removeFromBasket(foundProduct);
-            } else this.saveBasket();
-        }
-    }
-    //supprimer un article
-    removeFromBasket(product) {
-        let basket = getBasket();
-        basket = basket.filter((p) => p.id != product.id);
-        saveBasket();
-    }
-}
-
-//........création variables pour le localstorage
+//........variables pour le localstorage
 let choiceColor = document.querySelector('#colors');
 let choiceQuantity = document.querySelector('#quantity');
 let btnAddProduct = document.querySelector('#addToCart');
-const productName = document.querySelector('#title');
+let choiceName = document.querySelector('#title');
+Boolean = false;
 
 //............Ecoute du click pour l'ajout au panier
 btnAddProduct.addEventListener('click', function (event) {
     let valueColor = choiceColor.value; // récupération couleur choisie
     let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
+    let basket = {
+        quantityTotal: 0,
+        totalProducts: [],
+    };
     if (valueColor == '') {
         alert('Veuiller choisir une couleur'); // si couleur non selectionnée
     } else if (valueQuantity == 0) {
         alert('Veuillez choisir une quantité'); // si quantité non selectionnée
+    } else {
+        // récuperer ou creer le panier
+
+        let storageBasket = localStorage.getItem('basket');
+        if (storageBasket == null) {
+            return basket;
+        } else {
+            let basket = JSON.parse(storageBasket);
+        }
+
+        // définition canape à envoyer dans le local storage
+        let product = {
+            id: unitArticle._id,
+            name: unitArticle.name,
+            color: valueColor,
+            quantity: Number(valueQuantity),
+            img: unitArticle.imageUrl,
+        };
+
+        //controle si article dans le panier
+
+        for (var i = 0; i < basket.totalProducts.length; i++) {
+            basketProduct = basket.totalProducts[i];
+
+            //ajouter un article si pas présent dans le panier
+            if (
+                basketProduct.id !== product.id &&
+                basketProduct.color !== product.color
+            ) {
+                basket.totalProducts.push(product);
+                newQuantity = basket.totalQuantity + product.quantity;
+                basket.quantityTotal = newQuantity;
+                break;
+            }
+        }
+
+        // modification quantité si déja dans le panier
+        if (
+            basketProduct.id == product.id &&
+            basketProduct.color == product.color
+        ) {
+            newQuantity = basketProduct.quantity + product.quantity;
+            basketProduct.quantity = newQuantity;
+            basket.quantityTotal = product.quantity + basket.quantityTotal;
+        }
+
+        alert('Panier mis à jour');
+        let lineBasket = JSON.stringify(basket);
+        localStorage.setItem('basket', lineBasket);
+        window.location.reload();
     }
-    // récupération du panier
-    else Basket;
 });
