@@ -79,9 +79,9 @@ function showArticle(product) {
 //...................local storage..................
 
 //........variables pour le localstorage
-let choiceColor = document.querySelector('#colors');
-let choiceQuantity = document.querySelector('#quantity');
-let btnAddProduct = document.querySelector('#addToCart');
+let choiceColor = document.getElementById('colors');
+let choiceQuantity = document.getElementById('quantity');
+let btnAddProduct = document.getElementById('addToCart');
 //let valueColor = choiceColor.value; // récupération couleur choisie
 //let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
 
@@ -101,6 +101,7 @@ btnAddProduct.addEventListener('click', () => {
     let valueColor = choiceColor.value; // récupération couleur choisie
     let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
     let basket = {
+        totalQuantity: 0,
         totalProducts: [],
     };
     // contrôle si les choix sont définis
@@ -114,12 +115,26 @@ btnAddProduct.addEventListener('click', () => {
             id: unitArticle._id,
             name: unitArticle.name,
             color: valueColor,
-            quantity: valueQuantity,
+            quantity: Number(valueQuantity),
         };
         // recupére un article si présent dans le localstorage
         let productInStorage = JSON.parse(localStorage.getItem('basket'));
 
         if (productInStorage) {
+            //controle si article dans panier pour ajouter quantité
+            const getProductStorage = productInStorage.find(
+                (p) =>
+                    p.id == choiceProduct.id && p.color == choiceProduct.color
+            );
+            if (getProductStorage) {
+                getProductStorage.quantity =
+                    getProductStorage.quantity + choiceProduct.quantity;
+                localStorage.setItem(
+                    'basket',
+                    JSON.stringify(productInStorage)
+                );
+                return;
+            }
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));
         } else {
