@@ -1,7 +1,6 @@
 /*Appel de l'API avec controle en console.log pour un article
 const requestURLProduct =
     'http://localhost:3000/api/products/107fb5b75607497b96722bda5b504926';
-
 fetch(requestURLProduct)
     .then(function (response) {
         if (response.ok) {
@@ -79,27 +78,23 @@ function showArticle(product) {
 //...................local storage..................
 
 //........variables pour le localstorage
-let btnAddProduct = document.getElementById('addToCart');
-
-//let unitArticle = '';
-
-function saveBasket(basket) {
-    localStorage.setItem('basket', JSON.stringify(basket));
-}
+let choiceColor = document.querySelector('#colors');
+let choiceQuantity = document.querySelector('#quantity');
+let btnAddProduct = document.querySelector('#addToCart');
 
 /////////////////////////////////////////////////
 //au click ajout au panier
 btnAddProduct.addEventListener('click', () => {
-    let valueColor = document.getElementById('colors').value; // récupération couleur choisie
-    let valueQuantity = document.getElementById('quantity').value; // récupértion quantité choisie
+    let valueColor = choiceColor.value; // récupération couleur choisie
+    let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
     let basket = {
         totalProducts: [],
     };
     // contrôle si les choix sont définis
     if (valueColor == '') {
         alert('Veuiller choisir une couleur'); // si couleur non selectionnée
-    } else if (valueQuantity == 0) {
-        alert('Veuillez choisir une quantité'); // si quantité non selectionnée
+    } else if (valueQuantity <= 0 || valueQuantity > 100) {
+        alert('Veuillez choisir une quantité entre 1 et 100'); // si quantité selectionnée
     } else {
         // recupére un article si présent dans le localstorage
         let productInStorage = JSON.parse(localStorage.getItem('basket'));
@@ -126,20 +121,18 @@ btnAddProduct.addEventListener('click', () => {
                     'basket',
                     JSON.stringify(productInStorage)
                 );
+                alert('Le panier est à jour');
+                window.location.reload();
                 return;
             }
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));
-        }
-        //pas d'articlr identique dans le panier
-        else {
+        } else {
             productInStorage = [];
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));
-            console.log(productInStorage);
+            alert("L'article a été ajouté au panier");
+            window.location.reload();
         }
     }
-    alert('Votre panier est à jour');
-    saveBasket;
-    window.location.reload();
 });
