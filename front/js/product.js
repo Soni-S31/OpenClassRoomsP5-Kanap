@@ -70,7 +70,7 @@ function showArticle(product) {
     for (let i = 0; i < colors.length; i++) {
         let color = colors[i];
         let optionColors = document.createElement('option');
-        optionColors.setAttribute('value', product.colors);
+        optionColors.setAttribute('value', color);
         optionColors.textContent = color;
         colorsItem.appendChild(optionColors);
     }
@@ -122,6 +122,8 @@ btnAddProduct.addEventListener('click', () => {
             }
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));
+            alert('Le panier est à jour');
+            window.location.reload();
             // sinon
         } else {
             productInStorage = [];
