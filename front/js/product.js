@@ -77,29 +77,24 @@ function showArticle(product) {
 }
 //...................local storage..................
 
-//........variables pour le localstorage
-let choiceColor = document.querySelector('#colors');
-let choiceQuantity = document.querySelector('#quantity');
 let btnAddProduct = document.querySelector('#addToCart');
 
-/////////////////////////////////////////////////
-//au click ajout au panier
+/////////////////////////au click ajout au panier///////////////
 btnAddProduct.addEventListener('click', () => {
-    let valueColor = choiceColor.value; // récupération couleur choisie
-    let valueQuantity = choiceQuantity.value; // récupértion quantité choisie
-    let basket = {
-        totalProducts: [],
-    };
+    let valueColor = document.querySelector('#colors').value; // récupération couleur choisie
+    let valueQuantity = document.querySelector('#quantity').value; // récupération quantité choisie
+    let basket = []; // création tableau panier
+
     // contrôle si les choix sont définis
     if (valueColor == '') {
         alert('Veuiller choisir une couleur'); // si couleur non selectionnée
     } else if (valueQuantity <= 0 || valueQuantity > 100) {
-        alert('Veuillez choisir une quantité entre 1 et 100'); // si quantité selectionnée
+        alert('Veuillez choisir une quantité entre 1 et 100'); // si quantité mal selectionnée
     } else {
-        // recupére un article si présent dans le localstorage
+        // recupérer panier si présent dans le localstorage
         let productInStorage = JSON.parse(localStorage.getItem('basket'));
 
-        //je crée mon produit choisi
+        //Création produit choisi
         let choiceProduct = {
             id: unitArticle._id,
             name: unitArticle.name,
@@ -113,7 +108,7 @@ btnAddProduct.addEventListener('click', () => {
                 (p) =>
                     p.id == choiceProduct.id && p.color == choiceProduct.color
             );
-            // si produit dans le panier
+            // si produit déja présent dans le panier
             if (getProductStorage) {
                 getProductStorage.quantity =
                     getProductStorage.quantity + choiceProduct.quantity;
@@ -127,6 +122,7 @@ btnAddProduct.addEventListener('click', () => {
             }
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));
+            // sinon
         } else {
             productInStorage = [];
             productInStorage.push(choiceProduct);
