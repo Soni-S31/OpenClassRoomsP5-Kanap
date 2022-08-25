@@ -123,17 +123,18 @@ async function showBasket() {
     }
     // SI PANIER PLEIN AFFICHER
     else {
-        for (let i = 0; i < basket.products.length; i++) {
-            productInBasket = basket.products[i];
+        let totalPrice = 0;
+        for (let i = 0; i < basket.length; i++) {
+            productInBasket = basket[i];
             showProducts(productInBasket);
             let priceProduct = await getProduct(productInBasket.id);
             let quantityProduct = productInBasket.quantity;
-            priceTotal += priceProduct.price * quantityProduct;
-            let itemTotalPrice = document.querySelector('#priceTotal');
-            itemTotalPrice.textContent = priceTotal;
+            totalPrice += priceProduct.price * quantityProduct;
+            let itemTotalPrice = document.querySelector('#totalPrice');
+            itemTotalPrice.textContent = totalPrice;
         }
-        let quantityTotal = document.querySelector('#quantityTotal');
-        quantityTotal.textContent = basket.quantityTotal;
+        let totalQuantity = document.querySelector('#totalQuantity');
+        totalQuantity.textContent = basket.quantityTotal;
     }
 }
 
