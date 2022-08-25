@@ -32,8 +32,8 @@ fetch(requestURLProduct)
             return response.json();
         }
     })
-    .then(function (resultatProduct) {
-        unitArticle = resultatProduct;
+    .then(async function (resultatProduct) {
+        unitArticle = await resultatProduct;
         showArticle(unitArticle);
     })
     .catch(function (error) {
@@ -83,7 +83,6 @@ let btnAddProduct = document.querySelector('#addToCart');
 btnAddProduct.addEventListener('click', () => {
     let valueColor = document.querySelector('#colors').value; // récupération couleur choisie
     let valueQuantity = document.querySelector('#quantity').value; // récupération quantité choisie
-    let basket = []; // création tableau panier
 
     // contrôle si les choix sont définis
     if (valueColor == '') {
@@ -93,7 +92,12 @@ btnAddProduct.addEventListener('click', () => {
     } else {
         // recupérer panier si présent dans le localstorage
         let productInStorage = JSON.parse(localStorage.getItem('basket'));
-
+        if (productInStorage == nul) {
+            let basket = {
+                quantityTotal: 0,
+                products: [],
+            }; // création tableau panier
+        }
         //Création produit choisi
         let choiceProduct = {
             id: unitArticle._id,

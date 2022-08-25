@@ -18,17 +18,16 @@ fetch(requestURL)
     */
 
 //Appel de l'APi et Affichage de la fonction
-const requestURL = 'http://localhost:3000/api/products/';
 let allProducts = '';
 
-fetch(requestURL)
+fetch('http://localhost:3000/api/products/')
     .then(function (response) {
         if (response.ok) {
             return response.json();
         }
     })
-    .then(function (resultatAPI) {
-        allProducts = resultatAPI;
+    .then(async function (resultatAPI) {
+        allProducts = await resultatAPI;
         showAllProducts(allProducts);
     })
     .catch(function (error) {
