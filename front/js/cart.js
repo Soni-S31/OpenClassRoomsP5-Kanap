@@ -16,7 +16,7 @@ function showProducts(item) {
     itemArticle.setAttribute('data-id', item.id);
     itemArticle.setAttribute('data-color', item.color);
     cartItems.appendChild(itemArticle);
-    console.log('ok');
+    console.log('affichage article ok');
 
     //DIV img
     const itemDivImg = document.createElement('div');
@@ -139,3 +139,51 @@ async function showBasket() {
 }
 
 showBasket();
+
+//Supprimer un article
+// list produit des bouton supprimer en tableau
+let deleteSelection = [document.querySelectorAll('deleteItem')];
+
+// création tableau pour récupérer le basket et vérifier la suppression
+let arrayDeleteControl = [];
+
+async function deleteProduct() {
+    arrayDeleteControl = basket;
+    for (let i = 0; i < deleteSelection.lengt; i++) {
+        //écoute au click
+        deleteSelection[i].addEventListener('click', () => {
+            arrayDeleteControl.splice([i], 1); // supprime un article à chaque index[i] écouté
+            deleteSelection[i].parentElement.style.display = 'none'; //supprime l'article de l'écran
+            //MAJ du  localStorage
+            basket = localStorage.setItem(
+                'basket',
+                JSON.stringify(arrayDeleteControl)
+            );
+        });
+    }
+}
+
+/*
+    let items = getItem();
+    for (i = 0; i < items.length; i++){
+        if id == items[i]
+    }
+    const deleteProduct = document.querySelector('.deleteItem');
+    deleteProduct.addEventListener('click', function () {
+        window.localStorage.removeItem('basket');
+    });*/
+
+//saveBasket(basket);
+
+// sauvegarder le panier
+function saveBasket(basket) {
+    localStorage.setItem('basket', JSON.stringify(basket));
+}
+
+//récupérer un article du panier
+function getItem() {
+    let products = [];
+    if (localStorage.getItem('basket') != null) {
+        products = JSON.parse(localStorage.getItem('basket'));
+    }
+}
