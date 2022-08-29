@@ -113,15 +113,16 @@ async function getProduct(id) {
         .catch((error) => alert('Erreur : ' + error));
 }
 
-//Affichage panier si vide
+//Affichage panier
 let priceTotal = 0;
 async function showBasket() {
+    //si vide
     if (productInStorage == null) {
         let basketEmpty = document.createElement('p');
         basketEmpty.textContent = 'Le panier est vide';
         cartItems.appendChild(basketEmpty);
     }
-    // SI PANIER PLEIN AFFICHER
+    // SI PLEIN
     else {
         let totalPrice = 0;
         for (let i = 0; i < basket.length; i++) {
@@ -195,11 +196,11 @@ function editQuantity() {
     let itemQuantity = document.querySelectorAll('.itemQuantity');
     for (let q = 0; q < itemQuantity.length; q++) {
         unitItemQuantity = itemQuantity[q];
-        //ecoute du changement
+        //Ecoute du changement
         unitItemQuantity.addEventListener('change', function (event) {
             for (let c = 0; c < basket.length; c++) {
                 basketProduct = basket[c];
-                // identification de l'element HTML à modifier
+                // identification de l'element dans HTML
                 let articleEditID = event.target
                     .closest('article')
                     .getAttribute('data-id');
@@ -208,11 +209,12 @@ function editQuantity() {
                     .getAttribute('data-color');
                 newQuantityValue = event.target.valueAsNumber;
                 alert('La quantité a été mise à jour.');
-
+                //si article Visé = article localstorage
                 if (
                     basketProduct.id == articleEditID &&
                     basketProduct.color == articleEditColor
                 ) {
+                    //modification quantité
                     addQuantity = newQuantityValue - basketProduct.quantity;
                     basketProduct.quantity = newQuantityValue;
                     basket.totalQuantity = basket.totalQuantity + addQuantity;
@@ -224,3 +226,21 @@ function editQuantity() {
         });
     }
 }
+
+////////////////Formulaire
+//// Récupération des coordonnées du formulaires
+// variables du formulaire
+const formulaire = document.querySelector('.cart__order__form');
+const formFirstName = document.getElementById('firstName');
+const formLastName = document.getElementById('lastName');
+const formAdress = document.getElementById('address');
+const formCity = document.getElementById('city');
+const formEmail = document.getElementById('email');
+const formOrder = document.getElementById('order');
+
+/// Regex controlés sur regex101.com
+let regName = new RegExp('^[a-zA-ZéèàêëïÈÉÊËÌÍÎÏ]+$');
+let regAdress = new RegExp("^[0-9,'a-zA-Zéèàêëï]+$");
+let regMail = new RegExp('w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$');
+
+/// vérification formulaire
