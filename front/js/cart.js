@@ -240,7 +240,7 @@ const formOrder = document.getElementById('order');
 /// Regex controlés sur regex101.com
 let regName = new RegExp('^[a-zA-ZéèàêëïÈÉÊËÌÍÎÏ]+$');
 let regAdress = new RegExp("^[A-zÀ-ú0-9 ,.'-]+$");
-let regMail = new RegExp('w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$');
+let regMail = new RegExp('^[a-zA-Z0-9_. -]+@[a-zA-Z.-]+[.]{1}[a-z]{2,10}$');
 
 /// controle formulaire
 // firstName
@@ -304,3 +304,73 @@ formEmail.addEventListener('change', function (event) {
         errorMail.innerHTML = 'Champ invalide, veuillez vérifier votre email !';
     }
 });
+
+///Valider la commande
+const btnOrder = document.querySelector('#order');
+
+// Ecoute du bouton Order
+btnOrder.addEventListener('click', function (c) {
+    //pour éviter le rechargement de la page qui vide les champs et interrompt la requete post avant la réponse du serveur
+    c.preventDefault();
+    //si formulaire non rempli > alert
+    if (
+        formFirstName.value === '' ||
+        formLastName.value === '' ||
+        formAdress.value === '' ||
+        formCity.value === '' ||
+        formEmail.value === ''
+    ) {
+        alert('Veuillez renseigner vos coordonnées pour passer commande !');
+    }
+    //si panier vide > alert
+    else if (productInStorage == null) {
+        alert('Votre panier doit contenir des articles pour passer commande !');
+    } else {
+        //récupération et envoie du panier
+        productId = [];
+        for (let p = 0; p < basket.length; p++) {
+            productId.push(basket[p].id);
+        }
+        requetePost();
+    }
+});
+
+//Requete Post a envoyer a l'Api pour obtenir l'ID de commande
+function requetePost(request) {
+    console.log(request);
+    //formulaire à envoyer
+    const order = {
+        contact: {
+            firstName: formFirstName.value,
+            lastName: formLastName.value,
+            address: formAdress.value,
+            city: formCity.value,
+            email: formEmail.value,
+        },
+        products: productId,
+    };
+    //En-tête de la requete
+    const heading = {
+        method: 'POST',
+        headers: {
+            Accept: 'application.json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(order),
+    };
+
+    fetch('http://localhost:3000/api/products/order', heading)
+        .then((response) => response.json())
+        .then(function (server) {
+            localStorage.clear();
+            orderId = server.orderId;
+            if (server.orderId != '') {
+                console.log(orderId);
+                location.href = 'confirmation.html?id=' + server.orderId;
+            }
+            console.log(orderId);
+        })
+        .catch((err) => {
+            console.log('Problème avec fetch : ' + err.message);
+        });
+}
