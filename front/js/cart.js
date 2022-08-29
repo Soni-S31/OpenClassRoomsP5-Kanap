@@ -227,8 +227,7 @@ function editQuantity() {
     }
 }
 
-////////////////Formulaire
-//// Récupération des coordonnées du formulaires
+//////////////////////Formulaire
 // variables du formulaire
 const formulaire = document.querySelector('.cart__order__form');
 const formFirstName = document.getElementById('firstName');
@@ -240,7 +239,68 @@ const formOrder = document.getElementById('order');
 
 /// Regex controlés sur regex101.com
 let regName = new RegExp('^[a-zA-ZéèàêëïÈÉÊËÌÍÎÏ]+$');
-let regAdress = new RegExp("^[0-9,'a-zA-Zéèàêëï]+$");
+let regAdress = new RegExp("^[A-zÀ-ú0-9 ,.'-]+$");
 let regMail = new RegExp('w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$');
 
-/// vérification formulaire
+/// controle formulaire
+// firstName
+const errorFirstName = document.querySelector('#firstNameErrorMsg');
+formFirstName.addEventListener('change', function (event) {
+    let value = event.target.value;
+    if (regName.test(value)) {
+        errorFirstName.innerHTML = '';
+    } else {
+        formFirstName.style.border = '2px solid red';
+        errorFirstName.innerHTML =
+            'Champ invalide, veuillez vérifier votre prénom !';
+    }
+});
+//lastName
+const errorLastName = document.querySelector('#lastNameErrorMsg');
+formLastName.addEventListener('change', function (event) {
+    let value = event.target.value;
+    if (regName.test(value)) {
+        errorLastName.innerHTML = '';
+    } else {
+        formLastName.style.border = '2px solid red';
+        errorLastName.innerHTML =
+            'Champ invalide, veuillez vérifier votre nom !';
+    }
+});
+
+//Adresse
+const errorAdress = document.querySelector('#addressErrorMsg');
+formAdress.addEventListener('change', function (event) {
+    let value = event.target.value;
+    if (regAdress.test(value)) {
+        errorAdress.innerHTML = '';
+    } else {
+        formAdress.style.border = '2px solid red';
+        errorAdress.innerHTML =
+            'Champ invalide, veuillez vérifier votre adresse !';
+    }
+});
+
+//Ville (qui comprend les cedex )
+const errorCity = document.querySelector('#cityErrorMsg');
+formCity.addEventListener('change', function (event) {
+    let value = event.target.value;
+    if (regAdress.test(value)) {
+        errorCity.innerHTML = '';
+    } else {
+        formCity.style.border = '2px solid red';
+        errorCity.innerHTML = 'Champ invalide, veuillez vérifier votre ville !';
+    }
+});
+
+//Email
+const errorMail = document.querySelector('#emailErrorMsg');
+formEmail.addEventListener('change', function (event) {
+    let value = event.target.value;
+    if (regMail.test(value)) {
+        errorMail.innerHTML = '';
+    } else {
+        formEmail.style.border = '2px solid red';
+        errorMail.innerHTML = 'Champ invalide, veuillez vérifier votre email !';
+    }
+});
