@@ -37,7 +37,7 @@ fetch(requestURLProduct)
         showArticle(unitArticle);
     })
     .catch(function (error) {
-        alert('Erreur : ' + error); // Une erreur est survenue
+        alert('Erreur affichage : merci de revenir plus tard'); // Une erreur est survenue
     });
 
 //................................Affichage de l'article page produit..........
@@ -92,7 +92,7 @@ btnAddProduct.addEventListener('click', () => {
     } else {
         // recupérer panier si présent dans le localstorage
         let productInStorage = JSON.parse(localStorage.getItem('basket'));
-        if (productInStorage == nul) {
+        if (productInStorage == null) {
             let basket = {
                 quantityTotal: 0,
                 products: [],

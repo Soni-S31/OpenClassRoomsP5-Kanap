@@ -68,7 +68,7 @@ function showProducts(item) {
                 'Prix unitaire : ' + unitArticle.price + ' €';
             itemDivDesc.appendChild(itemPrice);
         })
-        .catch((error) => alert('Erreur récupération prix' + error));
+        .catch((error) => alert('Erreur récupération prix  ' + error));
 
     // Div content setting
     const itemDivSet = document.createElement('div');
@@ -238,7 +238,7 @@ const formEmail = document.getElementById('email');
 const formOrder = document.getElementById('order');
 
 /// Regex controlés sur regex101.com
-let regName = new RegExp('^[a-zA-ZéèàêëïÈÉÊËÌÍÎÏ]+$');
+let regName = new RegExp("^[a-zA-ZéèàêëïÈÉÊËÌÍÎÏ,.' -]+$");
 let regAdress = new RegExp("^[A-zÀ-ú0-9 ,.'-]+$");
 let regMail = new RegExp('^[a-zA-Z0-9_. -]+@[a-zA-Z.-]+[.]{1}[a-z]{2,10}$');
 

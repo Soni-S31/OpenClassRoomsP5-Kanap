@@ -27,11 +27,11 @@ fetch('http://localhost:3000/api/products/')
         }
     })
     .then(async function (resultatAPI) {
-        allProducts = await resultatAPI;
+        allProducts = resultatAPI;
         showAllProducts(allProducts);
     })
     .catch(function (error) {
-        alert('Erreur : ' + error); // Une erreur est survenue
+        alert('Erreur affichage, merci de revenir nous voir plus tard'); // Une erreur est survenue
     });
 
 //Affichage des produits
