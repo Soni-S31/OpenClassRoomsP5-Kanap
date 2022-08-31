@@ -1,9 +1,9 @@
-// recupérer panier du localstorage
+// récupération du panier du localstorage
 let productInStorage = localStorage.getItem('basket');
 let basket = JSON.parse(productInStorage);
 console.log(productInStorage);
 
-// recupération de la section pour insertion 'article'
+// récupération de la section pour insertion 'article'
 let cartItems = document.querySelector('#cart__items');
 
 ////// function affichage du panier
@@ -106,17 +106,17 @@ function showProducts(item) {
     itemDivDelete.appendChild(itemPDelete);
 }
 
-//Appel de l'APi pour les infos produit
+////Appel de l'APi pour les infos produit
 async function getProduct(id) {
     return fetch('http://localhost:3000/api/products/' + id)
         .then((response) => response.json())
         .catch((error) => alert('Erreur : ' + error));
 }
 
-//Affichage panier
+////Affichage panier
 let priceTotal = 0;
 async function showBasket() {
-    //si vide
+    //SI VIDE
     if (productInStorage == null) {
         let basketEmpty = document.createElement('p');
         basketEmpty.textContent = 'Le panier est vide';
@@ -151,7 +151,7 @@ function deleteProduct() {
         deleteUnit = deleteP[j];
         //Ecoute du click de la suppression
         deleteUnit.addEventListener('click', function (event) {
-            // identification de l'element dans HTML
+            // identification de l'Élement dans HTML
             let articleDeleteID = event.target
                 .closest('article')
                 .getAttribute('data-id');
@@ -173,7 +173,7 @@ function deleteProduct() {
                     item.color !== articleDeleteColor
             );
             basket = result;
-            // calcul de de la nouvelle quantité et prix total
+            // calcul de la nouvelle quantité et du prix total
             newQuantity = basket.totalQuantity - productToDelete.quantity;
             basket.totalQuantity = newQuantity;
             priceToDel = productToDelete.quantity * productToDelete.price;
@@ -200,7 +200,7 @@ function editQuantity() {
         unitItemQuantity.addEventListener('change', function (event) {
             for (let c = 0; c < basket.length; c++) {
                 basketProduct = basket[c];
-                // identification de l'element dans HTML
+                // identification de l'élèment dans HTML
                 let articleEditID = event.target
                     .closest('article')
                     .getAttribute('data-id');
@@ -281,7 +281,7 @@ formAdress.addEventListener('change', function (event) {
     }
 });
 
-//Ville (qui comprend les cedex )
+//Ville
 const errorCity = document.querySelector('#cityErrorMsg');
 formCity.addEventListener('change', function (event) {
     let value = event.target.value;
@@ -305,7 +305,7 @@ formEmail.addEventListener('change', function (event) {
     }
 });
 
-///Valider la commande
+///////////Valider la commande
 const btnOrder = document.querySelector('#order');
 
 // Ecoute du bouton Order
