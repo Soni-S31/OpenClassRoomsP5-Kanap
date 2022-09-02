@@ -117,7 +117,7 @@ async function getProduct(id) {
 let priceTotal = 0;
 async function showBasket() {
     //SI VIDE
-    if (productInStorage == null) {
+    if (basket == null || basket == '') {
         let basketEmpty = document.createElement('p');
         basketEmpty.textContent = 'Le panier est vide';
         cartItems.appendChild(basketEmpty);
@@ -228,7 +228,7 @@ function editQuantity() {
 }
 
 //////////////////////Formulaire
-// variables du formulaire
+// Constantes du formulaire
 const formulaire = document.querySelector('.cart__order__form');
 const formFirstName = document.getElementById('firstName');
 const formLastName = document.getElementById('lastName');

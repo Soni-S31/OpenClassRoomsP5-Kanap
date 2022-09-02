@@ -116,13 +116,6 @@ btnAddProduct.addEventListener('click', () => {
             if (getProductStorage) {
                 getProductStorage.quantity =
                     getProductStorage.quantity + choiceProduct.quantity;
-                localStorage.setItem(
-                    'basket',
-                    JSON.stringify(productInStorage)
-                );
-                alert('Le panier est à jour');
-                window.location.reload();
-                return;
             }
             productInStorage.push(choiceProduct);
             localStorage.setItem('basket', JSON.stringify(productInStorage));

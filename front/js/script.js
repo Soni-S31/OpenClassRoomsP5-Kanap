@@ -1,22 +1,3 @@
-/*Appel de l'API avec controle en console.log
-const requestURL = 'http://localhost:3000/api/products/';
-let allProducts = '';
-
-fetch(requestURL)
-    .then(function (response) {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then(function (resultatAPI) {
-        allProducts = resultatAPI;
-        console.log(resultatAPI);
-    })
-    .catch(function (error) {
-        alert('Erreur : ' + error); // Une erreur est survenue
-    });
-    */
-
 //Appel de l'APi et Affichage de la fonction
 let allProducts = '';
 
@@ -27,7 +8,7 @@ fetch('http://localhost:3000/api/products/')
         }
     })
     .then(async function (resultatAPI) {
-        allProducts = resultatAPI;
+        allProducts = await resultatAPI;
         showAllProducts(allProducts);
     })
     .catch(function (error) {
