@@ -323,7 +323,7 @@ btnOrder.addEventListener('click', function (c) {
         alert('Veuillez renseigner vos coordonnées pour passer commande !');
     }
     //si panier vide > alert
-    else if (productInStorage == null) {
+    else if (basket == null) {
         alert('Votre panier doit contenir des articles pour passer commande !');
     } else {
         //récupération et envoie du panier
